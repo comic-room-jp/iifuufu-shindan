@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あなたが目が離せなくなるのは誰？｜いい夫婦の日 夫婦キャラ診断</title>
+<meta name="description" content="8つの質問で、『成瀬社長は面倒見が良すぎる。』『フウフヤメマスカ？』の全10キャラから、あなたが目が離せなくなる1人を診断！">
+<meta property="og:title" content="あなたが目が離せなくなるのは誰？｜いい夫婦の日 夫婦キャラ診断">
+<meta property="og:description" content="8つの質問で、2作品・全10キャラから、あなたが目が離せなくなる1人を診断！">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://comic-room-jp.github.io/iifuufu-shindan/">
+<meta property="og:image" content="https://comic-room-jp.github.io/iifuufu-shindan/ogp.jpg"><!-- 仮のOGP画像（ogp.jpg）。公開URLが決まったら差し替え -->
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+/* レイアウト：ピンクの水玉地に白いカード1枚。スタート→設問→結果を1画面ずつ切り替える */
+:root {
+  --rose: #ee7f9d;        /* 地の色 */
+  --rose-deep: #d9577d;   /* 地の濃い色・強調 */
+  --berry: #6e1d42;       /* 文字の濃い色・ボタン */
+  --butter: #ffe9a6;      /* 選択肢ボタン */
+  --butter-deep: #ffd76a;
+  --ink: #3a1c2a;         /* 本文 */
+  --muted: #8d6070;
+  --paper: #ffffff;
+  --blush: #fde6ee;       /* 薄いピンク面 */
+  --pink-dark: #c2185b;
+  --radius: 22px;
+  --font: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', 'Hiragino Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font); color: var(--ink); min-height: 100vh;
+  background-color: var(--rose);
+  background-image: radial-gradient(rgba(255,255,255,0.22) 2px, transparent 2.6px), radial-gradient(rgba(255,255,255,0.14) 2px, transparent 2.6px);
+  background-size: 24px 24px; background-position: 0 0, 12px 12px;
+}
+#app { max-width: 480px; margin: 0 auto; padding: 20px 16px 40px; }
+.hidden { display: none !important; }
+button { font-family: var(--font); }
+
+/* スタート画面 */
+.start { text-align: center; color: #fff; padding-top: 12px; }
+.start-eyebrow { display: inline-block; background: var(--paper); color: var(--rose-deep); font-size: 13px; font-weight: 900; letter-spacing: 0.08em; padding: 6px 16px; border-radius: 999px; }
+.start-title { margin: 16px 0 12px; font-size: 32px; font-weight: 900; line-height: 1.35; text-wrap: balance; text-shadow: 0 3px 0 var(--rose-deep); }
+.start-title span { display: inline-block; color: var(--butter); font-size: 36px; }
+.start-sub { font-size: 14px; font-weight: 700; line-height: 1.7; }
+.start-pics { position: relative; height: 270px; margin: 22px auto 8px; max-width: 360px; }
+.start-pics img { position: absolute; background: #fff; padding: 6px; border-radius: 6px; box-shadow: 0 6px 18px rgba(110,29,66,0.25); }
+.start-pics img:first-child { width: 52%; left: 4%; top: 0; transform: rotate(-6deg); z-index: 1; }
+.start-pics img:last-child { width: 62%; right: 2%; top: 92px; transform: rotate(5deg); z-index: 2; }
+.btn-start { display: block; width: 100%; max-width: 340px; margin: 18px auto 14px; padding: 18px; border: none; border-radius: 999px; background: var(--berry); color: #fff; font-size: 20px; font-weight: 900; letter-spacing: 0.1em; cursor: pointer; box-shadow: 0 5px 0 #3e0f25; transition: transform 0.12s, box-shadow 0.12s; }
+.btn-start:hover { transform: translateY(2px); box-shadow: 0 3px 0 #3e0f25; }
+.start-works { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.start-works span { font-size: 11px; font-weight: 700; color: var(--berry); background: rgba(255,255,255,0.85); padding: 4px 12px; border-radius: 999px; }
+
+/* 設問画面 */
+.q-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #fff; margin-bottom: 10px; }
+.q-head-title { font-size: 12px; font-weight: 900; letter-spacing: 0.04em; }
+.progress-step { font-size: 12px; font-weight: 900; white-space: nowrap; }
+.progress-bar { height: 8px; background: rgba(255,255,255,0.4); border-radius: 999px; overflow: hidden; margin-bottom: 16px; }
+.progress-fill { height: 100%; background: var(--berry); border-radius: 999px; transition: width 0.4s ease; }
+.q-card { background: var(--paper); border-radius: var(--radius); padding: 22px 18px 22px; box-shadow: 0 8px 0 rgba(110,29,66,0.18); transition: opacity 0.2s; }
+.q-num { text-align: center; color: var(--rose-deep); font-weight: 900; line-height: 1; }
+.q-num span { font-size: 40px; }
+.q-num small { font-size: 14px; margin-left: 2px; color: var(--muted); }
+.q-text { text-align: center; font-size: 20px; font-weight: 900; line-height: 1.55; color: var(--ink); margin: 10px 0 16px; text-wrap: balance; }
+.q-img { width: 100%; aspect-ratio: 16 / 10; border-radius: 10px; overflow: hidden; margin-bottom: 18px; background: var(--blush); display: flex; align-items: center; justify-content: center; text-align: center; font-size: 12px; line-height: 1.6; color: var(--muted); padding: 12px; }
+.q-img.has-img { display: table; width: auto; max-width: 100%; aspect-ratio: auto; padding: 0; margin: 0 auto 18px; background: none; border: 2px solid var(--ink); }
+.q-img img { display: block; width: auto; height: auto; max-width: 100%; max-height: 320px; }
+.choices { display: flex; flex-direction: column; gap: 12px; }
+.choice-btn { position: relative; width: 100%; min-height: 58px; padding: 14px 18px 14px 58px; border: none; border-radius: 999px; background: var(--butter); color: var(--ink); font-size: 15px; font-weight: 700; line-height: 1.45; text-align: center; text-wrap: balance; cursor: pointer; box-shadow: 0 4px 0 var(--butter-deep); transition: transform 0.12s, box-shadow 0.12s, background 0.12s; }
+.choice-btn:hover { background: var(--butter-deep); transform: translateY(2px); box-shadow: 0 2px 0 #f2c13f; }
+.choice-btn:focus-visible, .btn-start:focus-visible { outline: 3px solid var(--berry); outline-offset: 3px; }
+.choice-key { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; background: var(--berry); color: #fff; font-size: 16px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+
+/* 結果画面 */
+.result-section { display: none; }
+.result-section.show { display: block; }
+.result-header { border-radius: var(--radius) var(--radius) 0 0; padding: 28px 20px 20px; text-align: center; }
+.result-name { font-size: 30px; font-weight: 900; line-height: 1.35; margin-bottom: 8px; }
+.result-work-name { font-size: 12px; font-weight: 700; opacity: 0.75; line-height: 1.6; padding: 0 8px; }
+.result-img-wrap { width: 100%; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
+.result-img-wrap.has-img { aspect-ratio: auto; background: #fff !important; }
+.result-img-wrap img { display: block; width: 100%; height: auto; }
+.result-img-placeholder { text-align: center; color: var(--muted); padding: 20px; }
+.result-caption { text-align: right; font-size: 11px; color: var(--muted); background: var(--paper); padding: 6px 14px 0; }
+.result-body { background: var(--paper); border-radius: 0 0 var(--radius) var(--radius); padding: 18px 20px 22px; box-shadow: 0 8px 0 rgba(110,29,66,0.18); }
+.result-desc { font-size: 14px; line-height: 1.9; color: var(--ink); margin-bottom: 22px; }
+.points-title { font-size: 12px; font-weight: 900; letter-spacing: 0.08em; color: var(--rose-deep); margin-bottom: 8px; }
+.read-lead { text-align: center; font-size: 12px; font-weight: 900; color: var(--muted); margin-bottom: 6px; }
+.btn-read { display: block; text-align: center; text-decoration: none; width: 100%; padding: 17px; border-radius: 999px; background: var(--berry); color: #fff; font-size: 16px; font-weight: 900; margin-bottom: 12px; box-shadow: 0 5px 0 rgba(0,0,0,0.25); }
+.btn-share { width: 100%; padding: 15px; border-radius: 999px; border: none; background: #111; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; margin-bottom: 10px; box-shadow: 0 4px 0 #555; }
+.btn-share:hover, .btn-read:hover { transform: translateY(2px); }
+.other { margin: 6px 0 20px; border: 2px dashed var(--rose); border-radius: 16px; padding: 14px 16px; display: flex; gap: 12px; align-items: center; text-decoration: none; color: var(--ink); background: var(--paper); }
+.other:hover { background: var(--blush); }
+.other-text { flex: 1; font-size: 12px; line-height: 1.6; }
+.other-text b { font-size: 14px; }
+.other-arrow { font-size: 20px; color: var(--rose-deep); }
+.btn-retry { width: 100%; padding: 13px; border-radius: 999px; border: 2px solid var(--rose); background: var(--paper); color: var(--rose-deep); font-size: 14px; font-weight: 900; cursor: pointer; margin-bottom: 18px; }
+.btn-retry:hover { background: var(--blush); }
+.footer-link { text-align: center; padding-top: 4px; }
+.note-label { font-size: 11px; font-weight: 900; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 8px; }
+.note-links { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.footer-link a { font-size: 12px; font-weight: 900; color: var(--pink-dark); text-decoration: none; border: 1.5px solid var(--rose); background: var(--paper); padding: 6px 14px; border-radius: 999px; }
+.site-footer { text-align: center; padding: 24px 0 0; font-size: 11px; color: #fff; line-height: 1.8; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="start" id="start-section">
+    <div class="start-eyebrow">♡ 11/22 いい夫婦の日 ♡</div>
+    <h1 class="start-title">あなたが<br><span>目が離せなくなる</span><br>のは誰？</h1>
+    <p class="start-sub">8つの質問で、2作品・全10キャラから<br>あなたが目が離せなくなる1人を診断！</p>
+    <div class="start-pics" aria-hidden="true">
+      <img src="q8.jpg" alt="">
+      <img src="q1.jpg" alt="">
+    </div>
+    <button class="btn-start" id="start-btn">診断スタート</button>
+    <div class="start-works">
+      <span>成瀬社長は面倒見が良すぎる。</span>
+      <span>フウフヤメマスカ？</span>
+    </div>
+  </div>
+  <div id="q-section" class="hidden">
+    <div class="q-head">
+      <span class="q-head-title">あなたが目が離せなくなるのは誰？</span>
+      <span class="progress-step" id="progress-label">1 / 8</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+    <div class="q-card" id="q-card">
+      <div class="q-num"><span id="q-num">Q1</span><small id="q-total">/8</small></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="q-img" id="q-img"></div>
+      <div class="choices" id="choices"></div>
+    </div>
+  </div>
+  <div class="result-section" id="result-section">
+    <div class="result-header" id="r-header">
+      <div class="result-name" id="r-name"></div>
+      <div class="result-work-name" id="r-work"></div>
+    </div>
+    <div class="result-img-wrap" id="r-img-wrap">
+      <div class="result-img-placeholder">
+        <div style="font-size:48px;margin-bottom:8px;opacity:0.4">♡</div>
+        <p style="font-size:13px;opacity:0.6">ここにキャラのコマ画像が入ります</p>
+      </div>
+    </div>
+    <div class="result-caption" id="r-caption"></div>
+    <div class="result-body">
+      <div class="result-desc" id="r-desc"></div>
+      <div class="read-lead">＼ このキャラに会いに行く ／</div>
+      <a class="btn-read" id="read-btn" href="#" target="_blank" rel="noopener">作品を試し読みする</a>
+      <button class="btn-share" id="share-btn">結果をXでシェアする</button>
+      <div class="points-title" style="margin-top:14px">こちらの作品もチェック！！</div>
+      <a class="other" id="other-link" href="#" target="_blank" rel="noopener">
+        <div class="other-text"><b id="other-work"></b><br><span id="other-genre"></span>｜試し読みする</div>
+        <div class="other-arrow">›</div>
+      </a>
+      <button class="btn-retry" id="retry-btn">もう一度診断する</button>
+      <div class="footer-link">
+        <div class="note-label">2作品の紹介記事をnoteで読む</div>
+        <div class="note-links">
+          <a href="#" target="_blank" rel="noopener" id="note-link-0"></a>
+          <a href="#" target="_blank" rel="noopener" id="note-link-1"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <p>© COMIC ROOM All Rights Reserved.</p>
+    <p>掲載画像の無断転載を禁じます。</p>
+  </footer>
+</div>
+<script>
+// route: "sweet" = 成瀬 / "real" = フウフ（画面には出さない内部の判定）。3問の多数決で決まる
+// type: lead / heart / mypace / pride / mob（レア枠：ナイト・唯）の5タイプ。各作品で同じタイプのキャラが対になる
+var questions = [
+  {
+    text: "夫婦もののドラマ、ついつい観ちゃうのは？",
+    img: "q1.jpg", memo: "フウフ：詩織と賢吾がソファでドラマを見るシーン",
+    choices: [
+      { label: "甘やかされてとろける溺愛もの", route: "sweet" },
+      { label: "ひやっとするリアルなすれ違いもの", route: "real" }
+    ]
+  },
+  {
+    text: "大切な人が落ち込んでいたら？",
+    img: "q2.jpg", memo: "成瀬：成瀬が愛理に「着いて来て」と言うシーン",
+    choices: [
+      { label: "先回りして、できることを全部やる", scores: {"lead":1} },
+      { label: "とことん話を聞いて、一緒に泣く", scores: {"heart":2} }
+    ]
+  },
+  {
+    text: "ケンカしたら、あなたは？",
+    img: "q3.jpg", memo: "成瀬：成瀬の「ダッサ！」に愛理が驚くシーン",
+    choices: [
+      { label: "思ったことは、その場で言っちゃう", scores: {"mypace":1} },
+      { label: "ぐっと飲み込む…けど、忘れない", scores: {"pride":1} }
+    ]
+  },
+  {
+    text: "パートナーのスマホに通知が。どうする？",
+    img: "q4.jpg", memo: "フウフ：車の画面に「藤本沙耶」から着信が来るシーン",
+    choices: [
+      { label: "気にしない。信じてるから", route: "sweet" },
+      { label: "正直、ちょっと気になる…", route: "real" }
+    ]
+  },
+  {
+    text: "「好き」って言葉にできる？",
+    img: "q5.jpg", memo: "フウフ：沙耶が「賢吾の事が好きだよ」と言うシーン",
+    choices: [
+      { label: "照れずにまっすぐ言える", scores: {"heart":1, "lead":1} },
+      { label: "本当に好きな人ほど言えない", scores: {"pride":1, "mypace":1} }
+    ]
+  },
+  {
+    text: "職場や友だちの“夫婦の話”が聞こえてきたら？",
+    img: "q6.jpg", memo: "成瀬：成瀬が「聞こえてるぞ！」と言うシーン",
+    choices: [
+      { label: "つい聞き耳を立てちゃう", scores: {"mob":1} },
+      { label: "自分のことで手一杯！", scores: {"mypace":2, "lead":1} }
+    ]
+  },
+  {
+    text: "いい夫婦の日、もし夫婦で過ごすなら？",
+    img: "q7.jpg", memo: "フウフ：賢吾と詩織の陶芸デートのシーン",
+    choices: [
+      { label: "サプライズでときめきたい", route: "sweet" },
+      { label: "いつも通りでいい。でも本音は話したい", route: "real" }
+    ]
+  },
+  {
+    text: "休みの日の過ごし方は？",
+    img: "q8.jpg", memo: "成瀬：改札の成瀬と愛理のシーン",
+    choices: [
+      { label: "予定はきっちり立てておきたい", scores: {"lead":2, "pride":2} },
+      { label: "気ままに、成り行きで", scores: {"heart":1, "mob":1} }
+    ]
+  }
+];
+
+// 同点のときはこの順で優先（レア枠を先に）
+// 出現率（全256通りで検証）：メイン各28通り＝約10.9％、レア枠各16通り＝6.25％
+var TIE_ORDER = ["mob", "pride", "mypace", "heart", "lead"];
+
+var NARUSE = {
+  work: "『成瀬社長は面倒見が良すぎる。』",
+  url: "https://manga.line.me/product/periodic?id=S160322", // LINEマンガ
+  note: "https://note.com/comicroom/n/nc28bdce50f54", noteLabel: "成瀬社長",
+  genre: "甘々溺愛ラブ", color: "#e91e63"
+};
+var FUUFU = {
+  work: "『フウフヤメマスカ？』",
+  url: "https://mechacomic.jp/books/201204",
+  note: "https://note.com/comicroom/n/n04df2d98cac8", noteLabel: "フウフヤメマスカ？",
+  genre: "リアル夫婦ドラマ", color: "#37474f"
+};
+
+// 紹介文・画像キャプション：担当編集の修正版（2026/11）
+var results = {
+  sweet: {
+    lead: {
+      name: "成瀬 怜", base: NARUSE, type: "面倒見が良すぎる先回りタイプ",
+      catch: "欲しいものは、言う前に届いてる。",
+      desc: "あなたが目が離せなくなるのは、面倒見が良すぎる敏腕社長・成瀬 怜です。「好き」をまっすぐ伝えたいあなたにとって、言葉より先に行動で示し、ドレスも靴もサイズまで把握して用意してくる“先回り”の包容力は、読みながらどっぷり甘やかされたくなるはず。厳しい言葉の裏にある不器用なほどの情の深さも魅力です。", caption: "第53話より",
+      points: ["頼まれる前に動いてしまう", "言葉はストレート、でも根は優しい", "相手の成長をいちばん近くで応援したい"],
+      scene: "第53話：パーティ前、成瀬がワンピースと靴を“サイズぴったり”で用意してくる回",
+      bg: "linear-gradient(160deg,#fce4ec,#f8bbd0,#f3e5f5)", color: "#ad1457", img: "naruse.jpg"
+    },
+    heart: {
+      name: "三浦 愛理", base: NARUSE, type: "健気にがんばる再出発タイプ",
+      catch: "傷ついても、私はちゃんと立ち上がれる。",
+      desc: "あなたが目が離せなくなるのは、健気で頑張り屋な愛理です。落ち込んだ人のそばで一緒に泣けるあなたは、夫の裏切りや職場の理不尽に傷ついても決して腐らず、料理教室の扉を開けて再出発していく彼女の打たれ強さと成長を、いちばん近くで応援したくなるはず。", caption: "第1話より",
+      points: ["相手に合わせすぎてしまうことがある", "落ち込んでも、行動で切り替えられる", "まっすぐ褒められると弱い"],
+      scene: "第1話：「私が変われば全部上手くいくはず」と料理教室に申し込む回",
+      bg: "linear-gradient(160deg,#fff8e1,#fce4ec,#fff3e0)", color: "#e65100", img: "airi.jpg"
+    },
+    mypace: {
+      name: "三浦 瑛太", base: NARUSE, type: "本音ダダ漏れの身勝手タイプ",
+      catch: "",
+      desc: "あなたが目が離せなくなるのは、愛理を追い詰める元夫・瑛太です。自分のペースや心地よさを大事にするあなただからこそ、自分の都合とプライド最優先で浮気をして家を出たうえに、「不倫したのは愛理の方」と職場に嘘の噂を流し、さらには罠まで仕掛けてくる彼の身勝手さには、「ありえない！次は何をしでかすの！？」とザワザワしながら目が離せなくなるはず。", caption: "第2話より",
+      points: [],
+      scene: "",
+      bg: "linear-gradient(160deg,#eceff1,#f5f5f5,#fce4ec)", color: "#455a64", img: "eita.jpg"
+    },
+    pride: {
+      name: "黒川 真琴", base: NARUSE, type: "プライド高めの秘めた一途タイプ",
+      catch: "好きって言えたら、こんなに苦しくない。",
+      desc: "あなたが目が離せなくなるのは、仕事に厳しく恋に不器用な真琴です。言いたいことほど胸にしまいがちなあなたは、完璧なキャリアウーマンの顔の裏で、大切な関係を壊せなくて学生時代から成瀬への想いを隠し続けてきた彼女の一途さに「わかる…」と深く共感するはず。", caption: "第65話より",
+      points: ["本命ほど素直になれない", "対等に張り合える相手に惹かれる", "計画どおりに進めたい完璧主義"],
+      scene: "第59話前後：銀座店オープンに向けて動き出すリヴァローレ（要確認）",
+      bg: "linear-gradient(160deg,#ede7f6,#e8eaf6,#fce4ec)", color: "#4527a0", img: "makoto.jpg"
+    },
+    mob: {
+      name: "星平 騎士（ナイト）", base: NARUSE, type: "姫ファーストの人たらしタイプ", rare: true,
+      catch: "姫のためなら、お安い御用。",
+      desc: "あなたが目が離せなくなるのは、憎めない元ホスト・ナイトです。人のことがつい気になる気ままなあなたにとって、調子が良くヒモ気質なダメ男でありながら、怒られればすっぴんで「裸一貫、出直す気持ちで」と面接に飛び込んでくる素直さは、つい絆されてしまうクセになる魅力です。", caption: "第38話より",
+      points: ["相手を“姫”扱いして全力で盛り上げる", "調子のよさと愛嬌でピンチを乗り切る", "やり直すと決めたら、まっすぐ飛び込める"],
+      scene: "第38話：すっぴんでリヴァローレのバイト面接に現れる回",
+      bg: "linear-gradient(160deg,#fffde7,#fff8e1,#fce4ec)", color: "#b8860b", img: "naito.jpg"
+    }
+  },
+  real: {
+    lead: {
+      name: "詩織", base: FUUFU, type: "しっかり者の頑張りすぎタイプ",
+      catch: "「うーん、もういっかな」――が出る前に。",
+      desc: "あなたが目が離せなくなるのは、気を使いすぎてひとりで抱え込む詩織です。「好き」をまっすぐ伝えられるあなただからこそ、本音を飲み込んで空回りし、我慢の限界を迎えてふっと心のスイッチが切れてしまう彼女の不器用さがもどかしくて、見届けずにはいられないはず。", caption: "第5話より",
+      points: ["計画を立てて、ひとりで進めがち", "相手にも同じ熱量を求めてしまう", "我慢の限界は、静かにやってくる"],
+      scene: "第5話：詩織の「うーん もういっかな」に震える回",
+      bg: "linear-gradient(160deg,#eceff1,#e3f2fd,#fce4ec)", color: "#1565c0", img: "shiori.jpg"
+    },
+    heart: {
+      name: "佐久野", base: FUUFU, type: "まっすぐ情熱の年下タイプ",
+      catch: "泣くほど本気なのは、ずるいですか。",
+      desc: "あなたが目が離せなくなるのは、不器用すぎるほど真っ直ぐな佐久野です。人の気持ちに寄り添えるあなたは、感情のコントロールが効かず、場所を問わず大泣きしてまで年上の先輩にぶつかっていく彼の極端な危なっかしさに、強く心を揺さぶられるはず。", caption: "第46話より",
+      points: ["感情がすぐ顔と行動に出る", "しっかり者の年上に惹かれがち", "ひとりの時間に、こっそり泣いている"],
+      scene: "第46話：自宅でDJプレイをしながら涙を流す回",
+      bg: "linear-gradient(160deg,#e0f7fa,#e8eaf6,#f3e5f5)", color: "#00838f", img: "sakuno.jpg"
+    },
+    mypace: {
+      name: "賢吾", base: FUUFU, type: "悪気ゼロの本音ダダ漏れタイプ",
+      catch: "悪気はない。だから余計に、刺さる。",
+      desc: "あなたが目が離せなくなるのは、見栄っ張りでどこか憎めない賢吾です。自分のペースを大事にするあなたは、変なところでカッコつけて墓穴を掘る彼の姿に「それは言っちゃダメ！」とツッコミを入れつつ、最後はちゃんと謝って反省する人間臭さに気づけば次の話をめくっているはず。", caption: "第35〜36話など",
+      points: ["思ったことがすぐ口に出る", "自分の時間とペースを大切にしたい", "謝るのは苦手、でも本当は反省している"],
+      scene: "第55話：「俺 子ども結構好きかも」――からの、まさかの一言",
+      bg: "linear-gradient(160deg,#eceff1,#fafafa,#e3f2fd)", color: "#37474f", img: "kengo.jpg"
+    },
+    pride: {
+      name: "藤本 沙耶", base: FUUFU, type: "過去を手放せないミステリアスタイプ",
+      catch: "笑顔の裏で、何を考えているの？",
+      desc: "あなたが目が離せなくなるのは、笑顔の奥に本心を隠す沙耶です。言いたいことを胸にしまいがちなあなたは、甘え上手な笑顔の裏で、欲しいもののために静かに、そして計算高く距離を詰めていく彼女が次に何をするのか、ざわざわしながら見届けてしまうはず。", caption: "第99話より",
+      points: ["本心はなかなか見せない", "昔の縁を大事にしすぎてしまう", "頼りたい人には、自然と頼れる"],
+      scene: "サエグサ先生お気に入り：管理人さんとの会話のあとの「良かったです」（話数要確認）",
+      bg: "linear-gradient(160deg,#f3e5f5,#eceff1,#fce4ec)", color: "#6a1b9a", img: "saya.jpg"
+    },
+    mob: {
+      name: "山本 唯", base: FUUFU, type: "職場の空気を読む観察上手タイプ", rare: true,
+      catch: "ちゃんと見てますよ、みんなのこと。",
+      desc: "あなたが目が離せなくなるのは、職場の空気を誰よりも早く察知する唯です。周りの人間模様をつい観察してしまうあなたには、鋭い観察眼で周りをよく見ながらも、恋も仕事も直感と勢いで突き進み、時々ズバッと言いすぎてしまう彼女の生き様が痛快に刺さるはず。", caption: "第5話・第66話・第83話より",
+      points: ["人間観察が得意", "職場の空気の変化にすぐ気づく", "自分の恋は、意外とまだこれから"],
+      scene: "第83話：詩織の部署・ライフサポート課のメンバー紹介（※担当確認）",
+      bg: "linear-gradient(160deg,#fffde7,#eceff1,#f5f5f5)", color: "#b8860b", img: "yui.jpg"
+    }
+  }
+};
+
+// 公開URL（GitHub Pagesの公開先が決まったら差し替え）
+var SHARE_URL = "https://comic-room-jp.github.io/iifuufu-shindan/";
+
+function shareText(r) {
+  return "私が目が離せなくなるのは" + r.base.work + "の" + r.name + "でした！\n" +
+    "【#いい夫婦の日診断】\n" + SHARE_URL;
+}
+
+var routeVotes, scoreBoard;
+function resetScores() {
+  routeVotes = {"sweet":0, "real":0};
+  scoreBoard = {"lead":0, "heart":0, "mypace":0, "pride":0, "mob":0};
+}
+
+function showQuestion(index) {
+  var q = questions[index];
+  var total = questions.length;
+  document.getElementById("progress").style.width = (((index + 1) / total) * 100) + "%";
+  document.getElementById("progress-label").textContent = (index + 1) + " / " + total;
+  document.getElementById("q-num").textContent = "Q" + (index + 1);
+  document.getElementById("q-text").textContent = q.text;
+  var qImg = document.getElementById("q-img");
+  var pic = qImages[index];
+  function putImage() {
+    qImg.className = "q-img has-img";
+    qImg.innerHTML = "";
+    qImg.appendChild(pic);
+  }
+  if (pic.complete && pic.naturalWidth) {
+    putImage(); // 先読み済みなら待たずに表示
+  } else {
+    qImg.className = "q-img";
+    qImg.textContent = "【画像】" + q.memo;
+    pic.onload = function() {
+      if (document.getElementById("q-num").textContent === "Q" + (index + 1)) putImage();
+    };
+  }
+  var c = document.getElementById("choices");
+  c.innerHTML = "";
+  for (var i = 0; i < q.choices.length; i++) {
+    (function(ch, i) {
+      var btn = document.createElement("button");
+      btn.className = "choice-btn";
+      btn.innerHTML = '<span class="choice-key">' + "AB".charAt(i) + '</span>' + ch.label;
+      btn.onclick = function() {
+        if (ch.route) routeVotes[ch.route]++;
+        var keys = Object.keys(ch.scores || {});
+        for (var k = 0; k < keys.length; k++) {
+          scoreBoard[keys[k]] += ch.scores[keys[k]];
+        }
+        var nextIndex = index + 1;
+        if (nextIndex < total) {
+          document.getElementById("q-card").style.opacity = "0";
+          setTimeout(function() {
+            document.getElementById("q-card").style.opacity = "1";
+            showQuestion(nextIndex);
+          }, 200);
+        } else {
+          var route = routeVotes.sweet > routeVotes.real ? "sweet" : "real";
+          var winner = TIE_ORDER[0];
+          for (var s = 1; s < TIE_ORDER.length; s++) {
+            if (scoreBoard[TIE_ORDER[s]] > scoreBoard[winner]) winner = TIE_ORDER[s];
+          }
+          showResult(results[route][winner], results[route === "sweet" ? "real" : "sweet"][winner]);
+        }
+      };
+      c.appendChild(btn);
+    })(q.choices[i], i);
+  }
+}
+
+function showResult(r, other) {
+  document.getElementById("progress").style.width = "100%";
+  document.getElementById("progress-label").textContent = "診断完了！";
+  document.getElementById("q-section").classList.add("hidden");
+  window.scrollTo(0, 0);
+  document.getElementById("r-header").style.background = r.bg;
+  document.getElementById("r-name").textContent = r.name;
+  document.getElementById("r-name").style.color = r.color;
+  document.getElementById("r-work").textContent = r.base.work + "｜" + r.base.genre;
+  document.getElementById("r-work").style.color = r.color;
+  document.getElementById("r-desc").textContent = r.desc;
+  document.getElementById("r-caption").textContent = r.caption || "第◯話より";
+  document.getElementById("read-btn").href = r.base.url;
+  document.getElementById("read-btn").textContent = r.base.work + "を試し読み";
+  document.getElementById("read-btn").style.background = r.base.color;
+  document.getElementById("other-link").href = other.base.url;
+  document.getElementById("other-work").textContent = other.base.work;
+  document.getElementById("other-genre").textContent = other.base.genre;
+  // noteの紹介記事：結果の作品を先に出す
+  [r.base, other.base].forEach(function(b, i) {
+    var a = document.getElementById("note-link-" + i);
+    a.href = b.note || "#";
+    a.textContent = b.noteLabel + " ›";
+  });
+
+  var imgWrap = document.getElementById("r-img-wrap");
+  imgWrap.style.background = r.bg;
+  imgWrap.onclick = function() { window.open(r.base.url, "_blank"); };
+  // 前回の結果の画像が残らないよう、毎回仮表示に戻してから読み込む
+  imgWrap.classList.remove("has-img");
+  imgWrap.innerHTML = '<div class="result-img-placeholder"><div style="font-size:48px;margin-bottom:8px;opacity:0.4">♡</div><p style="font-size:13px;opacity:0.6">ここにキャラのコマ画像が入ります</p></div>';
+  var img = new Image();
+  img.alt = r.name;
+  img.onload = function() {
+    if (document.getElementById("r-name").textContent !== r.name) return;
+    imgWrap.innerHTML = "";
+    imgWrap.classList.add("has-img");
+    imgWrap.appendChild(img);
+  };
+  img.src = r.img;
+
+  document.getElementById("result-section").classList.add("show");
+
+  document.getElementById("share-btn").onclick = function() {
+    var text = encodeURIComponent(shareText(r));
+    window.open("https://twitter.com/intent/tweet?text=" + text, "_blank");
+  };
+  document.getElementById("retry-btn").onclick = startQuiz;
+}
+
+// 設問画像は最初にまとめて先読みしておき、次の質問で待たずに出す
+var qImages = questions.map(function(q) {
+  var pic = new Image();
+  pic.src = q.img;
+  return pic;
+});
+
+function startQuiz() {
+  resetScores();
+  document.getElementById("start-section").classList.add("hidden");
+  document.getElementById("result-section").classList.remove("show");
+  document.getElementById("q-section").classList.remove("hidden");
+  document.getElementById("q-card").style.opacity = "1";
+  showQuestion(0);
+  window.scrollTo(0, 0);
+}
+
+window.onload = function() {
+  document.getElementById("start-btn").onclick = startQuiz;
+};
+</script>
+</body>
+</html>
