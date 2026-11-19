@@ -72,7 +72,8 @@ button { font-family: var(--font); }
 .stage-tag { position: absolute; z-index: 3; white-space: nowrap; background: var(--berry); color: #fff; font-size: 12px; font-weight: 900; letter-spacing: 0.04em; padding: 6px 13px; border-radius: 999px; border: 2px solid #fff; box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
 .stage-chara.naruse .stage-tag { left: 36%; top: 10px; transform: rotate(-5deg); }
 .stage-chara.fuufu .stage-tag { left: 30%; top: 14px; transform: rotate(4deg); }
-.stage-tag.real { background: #37474f; }
+.stage-tag.real { background: var(--berry); }
+.stage-chara.naruse .stage-tag { background: #e8336e; }
 @media (max-width: 480px) { .stage { margin-top: 10px; } .stage-tag { font-size: 11px; padding: 5px 10px; } .stage-chara.naruse .stage-tag { left: 26%; top: 2px; } .stage-chara.fuufu .stage-tag { top: 4px; } }
 .spark { position: absolute; z-index: 2; color: var(--butter); text-shadow: 0 0 8px rgba(255,255,255,0.9); animation: twinkle 2.4s ease-in-out infinite; }
 .spark.s1 { top: 30px; left: 52%; font-size: 24px; z-index: 4; }
