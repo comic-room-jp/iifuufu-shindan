@@ -209,7 +209,6 @@ button { font-family: var(--font); }
         <p style="font-size:13px;opacity:0.6">ここにキャラのコマ画像が入ります</p>
       </div>
     </div>
-    <div class="result-caption" id="r-caption"></div>
     <div class="result-body">
       <div class="result-desc" id="r-desc"></div>
       <div class="read-lead">＼ このキャラに会いに行く ／</div>
@@ -509,7 +508,6 @@ function showResult(r, other) {
   document.getElementById("r-work").textContent = r.base.work + "｜" + r.base.genre;
   document.getElementById("r-work").style.color = r.color;
   document.getElementById("r-desc").textContent = r.desc;
-  document.getElementById("r-caption").textContent = r.caption || "第◯話より";
   document.getElementById("read-btn").href = r.base.url;
   document.getElementById("read-btn").textContent = r.base.work + "を試し読み";
   document.getElementById("read-btn").style.background = r.base.color;
