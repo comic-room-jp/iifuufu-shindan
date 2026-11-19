@@ -483,6 +483,16 @@ function showQuestion(index) {
   }
 }
 
+// 結果の集計：どのキャラが出たかをGoogleフォームに送る（キャラ名・作品名のみ。画面には何も出ない）
+var LOG_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSe7DZ26cM1nvwOQd5N2huUKuscn1SofoZlJGD2meRIc9Ju5WA/formResponse";
+function logResult(r) {
+  try {
+    var body = new URLSearchParams();
+    body.append("entry.1565897399", r.name);
+    body.append("entry.358359988", r.base.work);
+    fetch(LOG_FORM, { method: "POST", mode: "no-cors", body: body });
+  } catch (e) {}
+}
 function showResult(r, other) {
   document.getElementById("progress").style.width = "100%";
   document.getElementById("progress-label").textContent = "診断完了！";
@@ -525,6 +535,7 @@ function showResult(r, other) {
   img.src = imgUrl(r.img);
 
   document.getElementById("result-section").classList.add("show");
+  logResult(r);
 
   document.getElementById("share-btn").onclick = function() {
     var text = encodeURIComponent(shareText(r));
